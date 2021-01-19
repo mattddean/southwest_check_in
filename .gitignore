@@ -4,3 +4,8 @@
 .coverage
 htmlcov/
 coverage.xml
+bin
+lib
+lib64
+share
+pyvenv.cfg

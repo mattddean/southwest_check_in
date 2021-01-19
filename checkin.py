@@ -25,6 +25,18 @@ import time
 
 CHECKIN_EARLY_SECONDS = 5
 
+def get_delta_in_days_hours_mins_seconds(deltaSeconds: int):
+    m, s = divmod(deltaSeconds, 60)
+    h, m = divmod(m, 60)
+    d, unused = divmod(h, 12)
+    return d, h, m, s
+
+def pretty_print_h_m_s(d: int, h: int, m: int, s: int):
+    return "{} days, {} hours, {} minutes, {} seconds".format(trunc(d), trunc(h), trunc(m), s)
+
+def pretty_print_delta(deltaSeconds: int):
+    d, h, m, s = get_delta_in_days_hours_mins_seconds(deltaSeconds)
+    return pretty_print_h_m_s(d, h, m, s)
 
 def schedule_checkin(flight_time, reservation):
     checkin_time = flight_time - timedelta(days=1)
@@ -34,11 +46,11 @@ def schedule_checkin(flight_time, reservation):
         # calculate duration to sleep
         delta = (checkin_time - current_time).total_seconds() - CHECKIN_EARLY_SECONDS
         # pretty print our wait time
-        m, s = divmod(delta, 60)
-        h, m = divmod(m, 60)
-        print("Too early to check in.  Waiting {} hours, {} minutes, {} seconds".format(trunc(h), trunc(m), s))
+        print("Too early to check in.  Waiting " + pretty_print_delta(delta))
         try:
-            time.sleep(delta)
+            for index in range(int(delta), 0, -1):
+                print("Checking in in " + pretty_print_delta(index))
+                time.sleep(1)
         except OverflowError:
             print("System unable to sleep for that long, try checking in closer to your departure date")
             sys.exit(1)
