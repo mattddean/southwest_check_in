@@ -38,6 +38,14 @@ This script can either be ran directly on your host or within Docker.
 $ pip install -r requirements.txt
 ```
 
+#### Or use venv
+
+```bash
+$ python3 -m venv .
+$ source ./bin/activate
+$ pip install -r requirements.txt
+```
+
 #### Usage
 
 ```bash
